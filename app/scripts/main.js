@@ -16,9 +16,7 @@ var fartlek = {
 
 var person = {
   fitnessLevel: parseInt(uri.getQueryParamValue('fitness')),
-} 
-
-console.log(fartlek);
+};
 
 var context = new webkitAudioContext();
 
@@ -46,58 +44,47 @@ Player.prototype.stop = function() {
 
 p = new Player(sequencer)
 
-var $button = $('.control'),
-    $faster = $('.faster'),
-    $slower = $('.slower');
-
-$button.on('click', function(ev) {
-  ev.preventDefault();
-
-  if (p.playing) {
-    p.stop();
-    $button.text("Play!");
-  } else {
-    p.play()
-    $button.text("Stop!")
-  }
-})
-
-
-$faster.on('click', function(ev) {
-  ev.preventDefault();
-
-  sequencer.stepLength = sequencer.stepLength * 0.5;
-  sequencer.sequencerCurrentTimeOffset = sequencer.sequencerCurrentTimeOffset * 0.5;
-})
-
-$slower.on('click', function(ev) {
-  ev.preventDefault();
-
-  sequencer.stepLength = sequencer.stepLength / 0.5;
-  sequencer.sequencerCurrentTimeOffset = sequencer.sequencerCurrentTimeOffset / 0.5;
-})
-
-var phases = Object.keys(fartlek);
-
-function setNextPhase(lastPhaseIndex) {
-  if (lastPhaseIndex >= (phases.length - 1)) {
-    return null
-  }
-  var nextPhaseIndex = lastPhaseIndex + 1,
-      nextPhase = phases[nextPhaseIndex];
-  setPhase(nextPhase, nextPhaseIndex);
-}
-
 function updateSequencer(intensity) {
   console.log("updateing sequencer to intencity " + intensity);
 }
 
-function setPhase(phase, index) {
-  window.setTimeout(function() {
-    console.log("set timeout for " + phase + " index " + index)
-    updateSequencer(fartlek[phase]['intensity'])
-    setNextPhase(index);
-  }, fartlek[phase]['duration'] * 1000)
+function setNextPhase(lastPhase, lastPhaseIndex) {
+  // if we're at the last phase, finish
+  if (lastPhaseIndex >= (phases.length - 1)) {
+    sequencer.stop();
+    $button.text("Start!");
+  } else {
+    var nextPhaseIndex = lastPhaseIndex + 1,
+        nextPhase = phases[nextPhaseIndex];
+    window.setTimeout(function() {
+      console.log("set timeout for " + nextPhase + " index " + nextPhaseIndex)
+      setPhase(nextPhase, nextPhaseIndex);
+    }, (fartlek[lastPhase]['duration'] * 1000))
+  }
 }
 
-setPhase(phases[0], 0);
+function setPhase(phase, index) {
+  updateSequencer(fartlek[phase]['intensity']);
+  window.setTimeout(function() {
+    setNextPhase(phase, index);
+  }, (fartlek[phase]['duration'] * 1000))
+}
+
+var $button = $('.control'),
+    phases = Object.keys(fartlek);
+
+$button.on('click', function(ev) {
+  ev.preventDefault();
+
+  console.log("BUTTON!");
+
+  if (p.playing) {
+    p.stop();
+    $button.text("Start!");
+  } else {
+    console.log("starting playing");
+    setPhase(phases[0], 0);
+    p.play()
+    $button.text("Stop!")
+  }
+})
