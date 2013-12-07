@@ -25,7 +25,8 @@ Player.prototype.stop = function() {
 p = new Player(sequencer)
 
 
-var $button = $('.control');
+var $button = $('.control'),
+    $faster = $('.faster');
 
 $button.on('click', function(ev) {
   ev.preventDefault();
@@ -38,3 +39,10 @@ $button.on('click', function(ev) {
     $button.text("Stop!")
   }
 })
+
+
+$faster.on('click', function(ev) {
+  ev.preventDefault();
+
+  
+}
