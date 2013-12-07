@@ -1,5 +1,6 @@
 var uri = new Uri(window.location.href);
 var fartlek = {
+  fitness: parseInt(uri.getQueryParamValue('fitness')),
   warmup:  parseInt(uri.getQueryParamValue('warmup')),
   hard:    parseInt(uri.getQueryParamValue('hard')),
   recover: parseInt(uri.getQueryParamValue('recover'))
