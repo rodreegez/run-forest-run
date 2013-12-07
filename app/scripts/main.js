@@ -88,9 +88,14 @@ function setNextPhase(lastPhaseIndex) {
   setPhase(nextPhase, nextPhaseIndex);
 }
 
+function updateSequencer(intensity) {
+  console.log("updateing sequencer to intencity " + intensity);
+}
+
 function setPhase(phase, index) {
   window.setTimeout(function() {
     console.log("set timeout for " + phase + " index " + index)
+    updateSequencer(fartlek[phase]['intensity'])
     setNextPhase(index);
   }, fartlek[phase]['duration'] * 1000)
 }
