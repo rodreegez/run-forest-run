@@ -1,3 +1,11 @@
+var uri = new Uri(window.location.href);
+var fartlek = {
+  warmup:  parseInt(uri.getQueryParamValue('warmup')),
+  hard:    parseInt(uri.getQueryParamValue('hard')),
+  recover: parseInt(uri.getQueryParamValue('recover'))
+};
+console.log(fartlek);
+
 var context = new webkitAudioContext();
 
 // create a new step sequencer with parameters:
