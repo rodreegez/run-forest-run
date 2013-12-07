@@ -85,3 +85,10 @@ $button.on('click', function(ev) {
     $button.text("Stop!")
   }
 })
+
+$('body').on('step', function(event) {
+  $body = $(this);
+  var nextBg = $body.data('altBg');
+  $body.data('altBg', $body.css('background'));
+  $body.css('background', nextBg);
+});

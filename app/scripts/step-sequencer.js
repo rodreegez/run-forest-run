@@ -101,6 +101,8 @@ StepSequencer.prototype = {
     oscillator.noteOn(startTime);
     oscillator.noteOff(startTime + stepLength);
 
+    $('body').trigger($.Event('step'));
+
   },
 
 
