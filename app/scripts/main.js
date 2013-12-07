@@ -76,13 +76,10 @@ var $button = $('.control'),
 $button.on('click', function(ev) {
   ev.preventDefault();
 
-  console.log("BUTTON!");
-
   if (p.playing) {
     p.stop();
     $button.text("Start!");
   } else {
-    console.log("starting playing");
     setPhase(phases[0], 0);
     p.play()
     $button.text("Stop!")
