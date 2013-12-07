@@ -26,7 +26,8 @@ p = new Player(sequencer)
 
 
 var $button = $('.control'),
-    $faster = $('.faster');
+    $faster = $('.faster'),
+    $slower = $('.slower');
 
 $button.on('click', function(ev) {
   ev.preventDefault();
@@ -44,5 +45,13 @@ $button.on('click', function(ev) {
 $faster.on('click', function(ev) {
   ev.preventDefault();
 
-  
+  sequencer.stepLength = sequencer.stepLength * 0.5;
+  sequencer.sequencerCurrentTimeOffset = sequencer.sequencerCurrentTimeOffset * 0.5;
+})
+
+$slower.on('click', function(ev) {
+  ev.preventDefault();
+
+  sequencer.stepLength = sequencer.stepLength / 0.5;
+  sequencer.sequencerCurrentTimeOffset = sequencer.sequencerCurrentTimeOffset / 0.5;
 })
