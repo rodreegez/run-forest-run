@@ -2,7 +2,7 @@ var uri = new Uri(window.location.href);
 var fartlek = {
   warmup:  { 
     duration: parseInt(uri.getQueryParamValue('warmup')),
-    intensity: 1
+    intensity: 2
   },
   hard: {
     duration: parseInt(uri.getQueryParamValue('hard')),
@@ -10,7 +10,7 @@ var fartlek = {
   },
   recover: { 
     duration: parseInt(uri.getQueryParamValue('recover')),
-    intensity: 2
+    intensity: 1
   }
 };
 
@@ -46,6 +46,11 @@ p = new Player(sequencer)
 
 function updateSequencer(intensity) {
   console.log("updateing sequencer to intencity " + intensity);
+  var intensityFactor = 1 / intensity,
+      fitnessFactor = person.fitnessLevel / 4,
+      runRate = intensityFactor / fitnessFactor;
+  sequencer.setCurrentTimeOffset = runRate;
+  sequencer.stepLength = runRate;
 }
 
 function setNextPhase(lastPhase, lastPhaseIndex) {
