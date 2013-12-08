@@ -19,12 +19,16 @@ var person = {
   fitnessLevel: parseInt(uri.getQueryParamValue('fitness')),
 };
 
+function randomNote() {
+  return Math.floor(Math.random() * 400) + 400;
+}
+
 function setup() {
   var context = new webkitAudioContext();
 
   // create a new step sequencer with parameters:
   // (audio context, step length, sequence of frequences)
-  sequencer = new StepSequencer(context, 1, [800, 440, 440, 440, 600, 440, 440, 440]);
+  sequencer = new StepSequencer(context, 1, [randomNote(), randomNote(), randomNote(), randomNote(), randomNote(), randomNote(), randomNote(), randomNote()]);
 
   // method to inject other audio nodes at the end of the graph
   sequencer.setupAudio();
