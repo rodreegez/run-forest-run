@@ -117,8 +117,9 @@ StepSequencer.prototype = {
 
 
     function schedulerLoop() {
-
       var sequencerCurrentTime = self.AC.currentTime - self.sequencerStartTime;
+
+      console.log(sequencerCurrentTime);
 
       if(sequencerCurrentTime > self.previousNoteStartTime) {
 

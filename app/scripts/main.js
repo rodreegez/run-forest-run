@@ -1,4 +1,5 @@
 var uri = new Uri(window.location.href);
+var p, sequencer;
 var fartlek = {
   warmup:  { 
     duration: parseInt(uri.getQueryParamValue('warmup')),
@@ -18,31 +19,33 @@ var person = {
   fitnessLevel: parseInt(uri.getQueryParamValue('fitness')),
 };
 
-var context = new webkitAudioContext();
+function setup() {
+  var context = new webkitAudioContext();
 
-// create a new step sequencer with parameters:
-// (audio context, step length, sequence of frequences)
-var sequencer = new StepSequencer(context, 1, [800, 440, 440, 440, 600, 440, 440, 440]);
+  // create a new step sequencer with parameters:
+  // (audio context, step length, sequence of frequences)
+  sequencer = new StepSequencer(context, 1, [800, 440, 440, 440, 600, 440, 440, 440]);
 
-// method to inject other audio nodes at the end of the graph
-sequencer.setupAudio();
+  // method to inject other audio nodes at the end of the graph
+  sequencer.setupAudio();
 
-var Player = function(sequencer) {
-  this.playing = false;
-  this.sequencer = sequencer;
+  var Player = function(sequencer) {
+    this.playing = false;
+    this.sequencer = sequencer;
+  }
+
+  Player.prototype.play = function() {
+    this.playing = true;
+    sequencer.play();
+  }
+
+  Player.prototype.stop = function() {
+    this.playing = false;
+    sequencer.stop();
+  }
+
+  p = new Player(sequencer)
 }
-
-Player.prototype.play = function() {
-  this.playing = true;
-  sequencer.play();
-}
-
-Player.prototype.stop = function() {
-  this.playing = false;
-  sequencer.stop();
-}
-
-p = new Player(sequencer)
 
 function updateSequencer(intensity) {
   console.log("updateing sequencer to intencity " + intensity);
@@ -78,17 +81,25 @@ function setPhase(phase, index) {
 var $button = $('.control'),
     phases = Object.keys(fartlek);
 
-$button.on('click', function(ev) {
+$button.one('click', function(ev){
   ev.preventDefault();
+  setup();
+  setPhase(phases[0], 0);
+  p.play();
+  $button.text('Stop!');
 
-  if (p.playing) {
-    p.stop();
-    $button.text("Start!");
-  } else {
-    setPhase(phases[0], 0);
-    p.play();
-    $button.text("Stop!");
-  }
+  $button.on('click', function(ev) {
+    ev.preventDefault();
+
+    if (p.playing) {
+      p.stop();
+      $button.text("Start!");
+    } else {
+      setPhase(phases[0], 0);
+      p.play();
+      $button.text("Stop!");
+    }
+  })
 })
 
 $('body').on('step', function(event) {
