@@ -12,7 +12,7 @@ function StepSequencer (audioContext, stepLength, steps) {
 
   this.AC = audioContext;
   this.stepLength = isNaN(stepLength) ? this.stepLength : stepLength;
-  this.steps = steps || [440, 660, 440, 400];
+  this.steps = steps || [480, 440, 440, 440];
 
   this._init();
 }
@@ -53,6 +53,8 @@ StepSequencer.prototype = {
 
   setupAudio: function() {
 
+    console.log('setting up audio');
+
     // add any additional audio nodes here and connect them to master volume
     var compressor = this.AC.createDynamicsCompressor();
     compressor.connect(this.masterVolume);
@@ -73,10 +75,10 @@ StepSequencer.prototype = {
     envelope.gain.value = 0;
 
     // calculate attack, decay, and release times
-    var attackTime = stepLength * 0.15;
+    var attackTime = stepLength * 0.1;
     var decayTime = stepLength * 0.1;
     var sustainTime = stepLength * 0.5;
-    var releaseTime = stepLength * 0.25;
+    var releaseTime = stepLength * 0.2;
 
     // start at 0
     envelope.gain.setValueAtTime(0.0, startTime);
@@ -107,7 +109,6 @@ StepSequencer.prototype = {
 
 
   _startSchedulerLoop: function(outputNode) {
-
     var self = this;
 
     schedulerLoop();
@@ -120,14 +121,14 @@ StepSequencer.prototype = {
       var sequencerCurrentTime = self.AC.currentTime - self.sequencerStartTime;
 
       if(sequencerCurrentTime > self.previousNoteStartTime) {
-        
+
         // delay 200ms after current time
         var nextNoteStartTime = self.AC.currentTime + self.sequencerCurrentTimeOffset;
 
 
         // loop if at end of sequence
         if (self.currentStepIndex >= self.steps.length) {
-          self.currentStepIndex = 0;                
+          self.currentStepIndex = 0;
         }
 
         self.scheduleStep(self.steps[self.currentStepIndex], self.stepLength, nextNoteStartTime);

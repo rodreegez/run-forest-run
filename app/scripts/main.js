@@ -2,15 +2,15 @@ var uri = new Uri(window.location.href);
 var fartlek = {
   warmup:  { 
     duration: parseInt(uri.getQueryParamValue('warmup')),
-    intensity: 2
+    intensity: 3
   },
   hard: {
     duration: parseInt(uri.getQueryParamValue('hard')),
-    intensity: 5
+    intensity: 6.5
   },
   recover: { 
     duration: parseInt(uri.getQueryParamValue('recover')),
-    intensity: 1
+    intensity: 2
   }
 };
 
@@ -22,7 +22,7 @@ var context = new webkitAudioContext();
 
 // create a new step sequencer with parameters:
 // (audio context, step length, sequence of frequences)
-var sequencer = new StepSequencer(context, 1, [440, 660, 440, 400]);
+var sequencer = new StepSequencer(context, 1, [800, 440, 440, 440, 600, 440, 440, 440]);
 
 // method to inject other audio nodes at the end of the graph
 sequencer.setupAudio();
@@ -49,7 +49,7 @@ function updateSequencer(intensity) {
   var intensityFactor = 1 / intensity,
       fitnessFactor = person.fitnessLevel / 4,
       runRate = intensityFactor / fitnessFactor;
-  sequencer.setCurrentTimeOffset = runRate;
+  sequencer.sequencerCurrentTimeOffset = runRate;
   sequencer.stepLength = runRate;
 }
 
@@ -86,8 +86,8 @@ $button.on('click', function(ev) {
     $button.text("Start!");
   } else {
     setPhase(phases[0], 0);
-    p.play()
-    $button.text("Stop!")
+    p.play();
+    $button.text("Stop!");
   }
 })
 
